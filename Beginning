@@ -1,0 +1,142 @@
+#include <iostream>
+#include <string>
+#include <limits>
+#include <sstream>
+
+
+void welcome()                                                              
+{
+    std::cout << "Welcome to the Unit Converter\n";
+};
+
+int unitSelect()                                                    
+{
+    int unitNumber;
+
+    std::cin>>unitNumber;
+    unitNumber --;
+
+    while((unitNumber<0)||(unitNumber>5))
+    {
+        std::cout<<"Incorrect value, try again\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin>>unitNumber;
+    }
+
+    return unitNumber ;
+}
+
+int firstSelect()
+{
+    int unitNumber;
+    std::cout << "Choose the type of unit you want to convert to\n";
+    std::cout << "[1]lb\t[2]kg\t[3]oz\t[4]ml\t[5]mi\t[6]km\n";
+    unitNumber = unitSelect();
+    return unitNumber;
+};
+
+double Value()
+{
+    std::string insertNumber;
+    double unitNumber;
+    std::cin.sync();
+
+    std::getline(std::cin,insertNumber);
+    for(int i = 0; i<insertNumber.length();i++)
+    {
+        if(insertNumber[i]==',')
+            insertNumber[i] = '.';
+    }
+
+    std::istringstream iss(insertNumber);
+
+    while(!(iss>>unitNumber))
+    {
+        std::cout<<"Incorrect value, try again\n";
+        std::cin.sync();
+        std::getline(std::cin,insertNumber);
+        for(int i = 0; i<insertNumber.length();i++)
+        {
+            if(insertNumber[i]==',')
+                insertNumber[i] = '.';
+        }
+
+        iss.str(insertNumber);
+        iss.clear();
+    }
+    iss>>unitNumber;
+    return unitNumber;
+};
+
+double firstValue()
+{
+    double tmp;
+    std::cout<<"Insert value of the first unit\n";
+    tmp = Value();
+    return tmp;
+};
+
+int secondSelect(int typeValue)
+{
+    switch(typeValue)
+    {
+        case 0:
+            std::cout<<"Converted value from Pounds to Kilograms is equal to : "; break;
+        case 1:
+            std::cout<<"Converted value from Kilograms to Pounds is equal to : "; break;
+        case 2:
+            std::cout<<"Converted value from Fluid Ounces to Milliliters is equal to : "; break;
+        case 3:
+            std::cout<<"Converted value from Milliliters Fluid Ounces is equal to : "; break;
+        case 4:
+            std::cout<<"Converted value from Galleons to Liters is equal to : "; break;
+        case 5:
+            std::cout<<"Converted value from Liters to Galleons is equal to : "; break;
+        default:
+            std::cout<<"incorrect value"; break;
+    }
+};
+
+double choice (double number, int unit)                    
+{
+
+    switch (unit)
+    {
+        case  0:
+            return number * 0.45359237;
+        case  1:
+            return number * 2.20462262;
+        case  2:
+            return number * 29.5735296;
+        case  3:
+            return number * 0.0338140227;
+        case  4:
+            return number * 3.78541178;
+        case  5:
+            return number * 0.264172052;
+        default:
+            return 0.0;
+    }
+}
+
+
+
+
+
+int main()
+{
+    int firstUnitID;
+    double firstUnitValue;
+    double convertedValue;
+
+    welcome();
+    firstUnitID = firstSelect();
+    firstUnitValue = firstValue();
+    secondSelect(firstUnitID);
+    convertedValue = choice(firstUnitValue,firstUnitID);
+    std::cout<<convertedValue<<std::endl;
+
+
+    return 0;
+}
